@@ -76,14 +76,9 @@
             float: right
         }
 
-        .tab-btn.sub {
-            padding: 6px 10px;
-            font-size: 13px
-        }
 
-        .panel.sub {
-            border-color: #eee
-        }
+
+
 
     </style>
 </head>
@@ -147,7 +142,9 @@
     // 1) Папка с файлами
     $dir = rtrim(__DIR__, '/') . '/uploads';
     if (!is_dir($dir)) {
-        @mkdir($dir, 0775, true);
+        if (!mkdir($dir, 0775, true) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
     }
 
     // 2) Актуальный список до возможного удаления (для белого списка)
@@ -223,8 +220,12 @@
                     $size = is_file($path) ? filesize($path) : 0;
                     ?>
                     <tr>
-                        <td><input class="file-chk" type="checkbox" name="files[]"
-                                   value="<?= htmlspecialchars($file) ?>"></td>
+                        <td>
+                            <label>
+                            <input class="file-chk" type="checkbox" name="files[]"
+                                   value="<?= htmlspecialchars($file) ?>">
+                            </label>
+                        </td>
                         <td><a href="<?= htmlspecialchars($url) ?>" download><?= htmlspecialchars($file) ?></a></td>
                         <td><?= htmlspecialchars($human($size)) ?></td>
                         <td><?= htmlspecialchars(date('Y-m-d H:i:s', $ts)) ?></td>
@@ -265,8 +266,15 @@
             rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/') . '/logs',
     ];
     $logsRoot = null;
-    foreach ($candidates as $p) { if (is_dir($p)) { $logsRoot = $p; break; } }
-    if ($logsRoot === null) { $logsRoot = __DIR__ . '/logs'; }
+    foreach ($candidates as $p) {
+        if (is_dir($p)) {
+            $logsRoot = $p;
+            break;
+        }
+    }
+    if ($logsRoot === null) {
+        $logsRoot = __DIR__ . '/logs';
+    }
 
     // URL префикс ссылки доступны только если logs под DOCUMENT_ROOT
     $logsUrlPrefix = 'logs/';
@@ -274,37 +282,41 @@
     // Удаление отмеченных файлов
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['__action'] ?? '') === 'delete_logs') {
         $baseReal = realpath($logsRoot);
-        $deleted = 0; $failed = 0;
+        $deleted = 0;
+        $failed = 0;
         $req = isset($_POST['files']) && is_array($_POST['files']) ? $_POST['files'] : [];
         foreach ($req as $rel) {
-            $rel  = ltrim($rel, '/');                      // относительный путь от logs/
+            $rel = ltrim($rel, '/');                      // относительный путь от logs/
             $full = $logsRoot . '/' . $rel;
             $real = realpath($full);
             if ($real && $baseReal && strpos($real, $baseReal . DIRECTORY_SEPARATOR) === 0 && is_file($real)) {
                 @unlink($real) ? $deleted++ : $failed++;
-            } else { $failed++; }
+            } else {
+                $failed++;
+            }
         }
         echo '<div style="margin:8px 0;padding:8px;border:1px solid #e5e5e5;background:#f7fff7">'
-                .'Удалено файлов: <strong>'.$deleted.'</strong>'
-                .($failed ? ' | Не удалось: <strong>'.$failed.'</strong>' : '')
-                .'</div>';
+                . 'Удалено файлов: <strong>' . $deleted . '</strong>'
+                . ($failed ? ' | Не удалось: <strong>' . $failed . '</strong>' : '')
+                . '</div>';
     }
 
     // Удаление пустых папок
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['__action'] ?? '') === 'delete_empty_log_dirs') {
         $baseReal = realpath($logsRoot);
-        $removed = 0; $failed = 0;
+        $removed = 0;
+        $failed = 0;
 
         // функция: папка пуста, если нет файлов внутри и на 1 уровень глубже
-        $isEmptyLogDir = function(string $dir) : bool {
-            $lvl1 = array_diff(@scandir($dir) ?: [], ['.','..']);
+        $isEmptyLogDir = function (string $dir): bool {
+            $lvl1 = array_diff(@scandir($dir) ?: [], ['.', '..']);
             foreach ($lvl1 as $e1) {
                 $p1 = $dir . '/' . $e1;
                 if (is_file($p1)) return false;
                 if (is_dir($p1)) {
-                    $lvl2 = array_diff(@scandir($p1) ?: [], ['.','..']);
+                    $lvl2 = array_diff(@scandir($p1) ?: [], ['.', '..']);
                     foreach ($lvl2 as $e2) {
-                        if (is_file($p1.'/'.$e2)) return false;
+                        if (is_file($p1 . '/' . $e2)) return false;
                     }
                 }
             }
@@ -312,35 +324,40 @@
         };
 
         // обходим только директории первого уровня
-        foreach (array_diff(@scandir($logsRoot) ?: [], ['.','..']) as $d) {
+        foreach (array_diff(@scandir($logsRoot) ?: [], ['.', '..']) as $d) {
             $dir = $logsRoot . '/' . $d;
             if (!is_dir($dir)) continue;
             $real = realpath($dir);
-            if (!$real || !$baseReal || strpos($real, $baseReal . DIRECTORY_SEPARATOR) !== 0) { $failed++; continue; }
+            if (!$real || !$baseReal || strpos($real, $baseReal . DIRECTORY_SEPARATOR) !== 0) {
+                $failed++;
+                continue;
+            }
 
             if ($isEmptyLogDir($dir)) {
                 // сначала удалим пустые подпапки (1 уровень), затем саму папку
-                foreach (array_diff(@scandir($dir) ?: [], ['.','..']) as $e1) {
+                foreach (array_diff(@scandir($dir) ?: [], ['.', '..']) as $e1) {
                     $p1 = $dir . '/' . $e1;
-                    if (is_dir($p1)) { @rmdir($p1); } // безопасно: папка пуста по условию
+                    if (is_dir($p1)) {
+                        @rmdir($p1);
+                    } // безопасно: папка пуста по условию
                 }
                 @rmdir($dir) ? $removed++ : $failed++;
             }
         }
 
         echo '<div style="margin:8px 0;padding:8px;border:1px solid #e5e5e5;background:#fff7f7">'
-                .'Удалено пустых папок: <strong>'.$removed.'</strong>'
-                .($failed ? ' | Не удалось: <strong>'.$failed.'</strong>' : '')
-                .'</div>';
+                . 'Удалено пустых папок: <strong>' . $removed . '</strong>'
+                . ($failed ? ' | Не удалось: <strong>' . $failed . '</strong>' : '')
+                . '</div>';
     }
 
     if (!is_dir($logsRoot)) {
-        echo '<p class="muted">Папка логов не найдена: <code>'.htmlspecialchars($logsRoot).'</code></p>';
+        echo '<p class="muted">Папка логов не найдена: <code>' . htmlspecialchars($logsRoot) . '</code></p>';
     } else {
         // Список верхнего уровня: файлы и папки-«даты»
         $entries = @scandir($logsRoot) ?: [];
         $rootFiles = [];  // [rel => ts]
-        $dateDirs  = [];  // [['name'=>dir,'time'=>ts], ...]
+        $dateDirs = [];  // [['name'=>dir,'time'=>ts], ...]
 
         foreach ($entries as $e) {
             if ($e === '.' || $e === '..') continue;
@@ -348,15 +365,22 @@
             if (is_file($p)) {
                 $rootFiles[$e] = @filectime($p) ?: @filemtime($p) ?: 0;
             } elseif (is_dir($p)) {
-                $dateDirs[] = ['name'=>$e, 'time'=>@filemtime($p) ?: 0];
+                $dateDirs[] = ['name' => $e, 'time' => @filemtime($p) ?: 0];
             }
         }
         arsort($rootFiles);
-        usort($dateDirs, fn($a,$b)=>$b['time'] <=> $a['time']);
+        usort($dateDirs, function ($a, $b) {
+            return $b['time'] <=> $a['time'];
+        });
 
         // утилита размера
-        $human = function($bytes){
-            $u=['Б','КБ','МБ','ГБ','ТБ']; $i=0; while($bytes>=1024 && $i<count($u)-1){ $bytes/=1024; $i++; }
+        $human = function ($bytes) {
+            $u = ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+            $i = 0;
+            while ($bytes >= 1024 && $i < count($u) - 1) {
+                $bytes /= 1024;
+                $i++;
+            }
             return sprintf('%.1f %s', $bytes, $u[$i]);
         };
 
@@ -384,14 +408,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($rootFiles as $name=>$ts): ?>
+                <?php foreach ($rootFiles as $name => $ts): ?>
                     <?php
                     $full = $logsRoot . '/' . $name;
-                    $url  = $logsUrlPrefix ? $logsUrlPrefix . rawurlencode($name) : null;
-                    $sz   = is_file($full) ? filesize($full) : 0;
+                    $url = $logsUrlPrefix ? $logsUrlPrefix . rawurlencode($name) : null;
+                    $sz = is_file($full) ? filesize($full) : 0;
                     ?>
                     <tr>
-                        <td><input class="file-chk-root" type="checkbox" name="files[]" value="<?= htmlspecialchars($name) ?>"></td>
+                        <td><input class="file-chk-root" type="checkbox" name="files[]"
+                                   value="<?= htmlspecialchars($name) ?>"></td>
                         <td>
                             <?php if ($url): ?>
                                 <a href="<?= htmlspecialchars($url) ?>" download><?= htmlspecialchars($name) ?></a>
@@ -407,13 +432,16 @@
             </table>
             <div style="margin-top:10px; display:flex; gap:8px;">
                 <button type="submit">Удалить отмеченные</button>
-                <button type="button" onclick="document.querySelectorAll('.file-chk-root').forEach(cb=>cb.checked=false)">Снять выделение</button>
+                <button type="button"
+                        onclick="document.querySelectorAll('.file-chk-root').forEach(cb=>cb.checked=false)">Снять
+                    выделение
+                </button>
             </div>
         </form>
         <script>
-            (function(){
+            (function () {
                 var master = document.getElementById('check-all-root');
-                if (master) master.addEventListener('change', function(){
+                if (master) master.addEventListener('change', function () {
                     document.querySelectorAll('.file-chk-root').forEach(cb => cb.checked = master.checked);
                 });
             })();
@@ -428,34 +456,36 @@
     echo '<div class="tabs" role="tablist" aria-label="Даты логов">';
     $first = true;
     foreach ($dateDirs as $d) {
-        $safe = preg_replace('/[^a-zA-Z0-9_-]/','_',$d['name']);
-        echo '<button class="tab-btn sub" role="tab" id="tab-date-'.$safe.'" aria-controls="panel-date-'.$safe.'" aria-selected="'.($first?'true':'false').'">'
+        $safe = preg_replace('/[^a-zA-Z0-9_-]/', '_', $d['name']);
+        echo '<button class="tab-btn sub" role="tab" id="tab-date-' . $safe . '" aria-controls="panel-date-' . $safe . '" aria-selected="' . ($first ? 'true' : 'false') . '">'
                 . htmlspecialchars($d['name']) . '</button>';
         $first = false;
     }
     echo '</div>';
 
     $first = true;
-    foreach ($dateDirs as $d) {
-    $safe    = preg_replace('/[^a-zA-Z0-9_-]/','_',$d['name']);
+    foreach ($dateDirs
+
+    as $d) {
+    $safe = preg_replace('/[^a-zA-Z0-9_-]/', '_', $d['name']);
     $dateDir = $logsRoot . '/' . $d['name'];
 
-    echo '<section class="panel sub" id="panel-date-'.$safe.'" role="tabpanel" aria-hidden="'.($first?'false':'true').'">';
-    echo '<h3>Папка: '.htmlspecialchars($d['name']).'</h3>';
+    echo '<section class="panel sub" id="panel-date-' . $safe . '" role="tabpanel" aria-hidden="' . ($first ? 'false' : 'true') . '">';
+    echo '<h3>Папка: ' . htmlspecialchars($d['name']) . '</h3>';
 
     // собираем файлы на 1 уровень вглубь
     $filesWithDates = []; // ключ — относительный путь от logsRoot (date/sub/file.log или date/file.log)
-    $level1 = array_diff(@scandir($dateDir) ?: [], ['.','..']);
+    $level1 = array_diff(@scandir($dateDir) ?: [], ['.', '..']);
     foreach ($level1 as $e1) {
         $p1 = $dateDir . '/' . $e1;
         if (is_file($p1)) {
-            $filesWithDates[$d['name'].'/'.$e1] = @filectime($p1) ?: @filemtime($p1) ?: 0;
+            $filesWithDates[$d['name'] . '/' . $e1] = @filectime($p1) ?: @filemtime($p1) ?: 0;
         } elseif (is_dir($p1)) {
-            $level2 = array_diff(@scandir($p1) ?: [], ['.','..']);
+            $level2 = array_diff(@scandir($p1) ?: [], ['.', '..']);
             foreach ($level2 as $e2) {
                 $p2 = $p1 . '/' . $e2;
                 if (is_file($p2)) {
-                    $filesWithDates[$d['name'].'/'.$e1.'/'.$e2] = @filectime($p2) ?: @filemtime($p2) ?: 0;
+                    $filesWithDates[$d['name'] . '/' . $e1 . '/' . $e2] = @filectime($p2) ?: @filemtime($p2) ?: 0;
                 }
             }
         }
@@ -468,10 +498,19 @@
     ?>
         <form method="post" onsubmit="return confirm('Удалить отмеченные файлы?');">
             <input type="hidden" name="__action" value="delete_logs">
+            <div style="margin-bottom:10px; display:flex; gap:8px;">
+                <button type="submit">Удалить отмеченные</button>
+                <button type="button"
+                        onclick="document.querySelectorAll('.file-chk-<?= htmlspecialchars($safe) ?>').forEach(cb=>cb.checked=false)">
+                    Снять выделение
+                </button>
+            </div>
+
             <table>
                 <thead>
                 <tr>
-                    <th style="width:36px;"><input type="checkbox" id="check-all-<?= htmlspecialchars($safe) ?>" title="Выделить все"></th>
+                    <th style="width:36px;"><input type="checkbox" id="check-all-<?= htmlspecialchars($safe) ?>"
+                                                   title="Выделить все"></th>
                     <th>Путь</th>
                     <th>Размер</th>
                     <th>Дата создания</th>
@@ -481,15 +520,16 @@
                 <?php foreach ($filesWithDates as $rel => $tsFile): ?>
                     <?php
                     $full = $logsRoot . '/' . $rel;
-                    $sz   = is_file($full) ? filesize($full) : 0;
-                    $url  = null;
+                    $sz = is_file($full) ? filesize($full) : 0;
+                    $url = null;
                     if ($logsUrlPrefix !== null) {
                         $parts = array_map('rawurlencode', explode('/', $rel));
                         $url = $logsUrlPrefix . implode('/', $parts);
                     }
                     ?>
                     <tr>
-                        <td><input class="file-chk-<?= htmlspecialchars($safe) ?>" type="checkbox" name="files[]" value="<?= htmlspecialchars($rel) ?>"></td>
+                        <td><input class="file-chk-<?= htmlspecialchars($safe) ?>" type="checkbox" name="files[]"
+                                   value="<?= htmlspecialchars($rel) ?>"></td>
                         <td>
                             <?php if ($url): ?>
                                 <a href="<?= htmlspecialchars($url) ?>" download><?= htmlspecialchars($rel) ?></a>
@@ -505,13 +545,16 @@
             </table>
             <div style="margin-top:10px; display:flex; gap:8px;">
                 <button type="submit">Удалить отмеченные</button>
-                <button type="button" onclick="document.querySelectorAll('.file-chk-<?= htmlspecialchars($safe) ?>').forEach(cb=>cb.checked=false)">Снять выделение</button>
+                <button type="button"
+                        onclick="document.querySelectorAll('.file-chk-<?= htmlspecialchars($safe) ?>').forEach(cb=>cb.checked=false)">
+                    Снять выделение
+                </button>
             </div>
         </form>
         <script>
-            (function(){
+            (function () {
                 var master = document.getElementById('check-all-<?= htmlspecialchars($safe) ?>');
-                if (master) master.addEventListener('change', function(){
+                if (master) master.addEventListener('change', function () {
                     document.querySelectorAll('.file-chk-<?= htmlspecialchars($safe) ?>').forEach(cb => cb.checked = master.checked);
                 });
             })();
@@ -526,11 +569,10 @@
         echo '<p class="muted">Папок с датами нет.</p>';
     }
 
-        echo '<p class="muted" style="margin-top:10px;">Читаю из: <code>'.htmlspecialchars(realpath($logsRoot) ?: $logsRoot).'</code></p>';
+        echo '<p class="muted" style="margin-top:10px;">Читаю из: <code>' . htmlspecialchars(realpath($logsRoot) ?: $logsRoot) . '</code></p>';
     }
     ?>
 </section>
-
 
 
 <?php
@@ -546,15 +588,15 @@
             tab.addEventListener('click', () => {
                 // деактивируем все табы и их панели внутри ЭТОГО tablist
                 tabs.forEach(t => {
-                    t.setAttribute('aria-selected','false');
+                    t.setAttribute('aria-selected', 'false');
                     const pid = t.getAttribute('aria-controls');
                     const panel = document.getElementById(pid);
-                    if (panel) panel.setAttribute('aria-hidden','true');
+                    if (panel) panel.setAttribute('aria-hidden', 'true');
                 });
                 // активируем текущий
-                tab.setAttribute('aria-selected','true');
+                tab.setAttribute('aria-selected', 'true');
                 const panel = document.getElementById(tab.getAttribute('aria-controls'));
-                if (panel) panel.setAttribute('aria-hidden','false');
+                if (panel) panel.setAttribute('aria-hidden', 'false');
             });
         });
     });
