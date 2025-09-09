@@ -54,7 +54,7 @@ $options = []; // сюда соберём eid => title
 
 //Если мы получили список СП
 if ($entityTypes) {
-    // 2) Тянем список типов, чтобы получить ЧЕЛОВЕЧЕСКИЕ названия
+    // Тянем список типов, чтобы получить ЧЕЛОВЕЧЕСКИЕ названия
     //    (фильтруем по entityTypeId локально)
     $types = CRest::call('crm.type.list', [
             'filter' => [],  // можно тянуть все, дальше отфильтруем
@@ -74,7 +74,7 @@ if ($entityTypes) {
         }
     }
 
-    // 3) Если каких-то eid нет в ответе API (скрыты/невернули) — добавим их "как есть"
+    //  Если каких-то eid нет в ответе API (скрыты/невернули) — добавим их "как есть"
     foreach ($entityTypes as $eid) {
         if (!isset($options[$eid])) {
             $options[$eid] = 'СП ' . $eid; // дефолтная подпись
@@ -83,7 +83,7 @@ if ($entityTypes) {
 }
 ?>
 
-<!-- 4) Отрисовываем селект. name="entityTypeId" — ключ! он уйдет в pars.php -->
+<!-- Отрисовываем селект name="entityTypeId" — ключ! он уйдет в pars.php -->
 <select id="entityTypeId" name="entityTypeId" required>
     <option value="" disabled selected>— выберите смарт-процесс —</option>
     <?php foreach ($options as $eid => $title): ?>

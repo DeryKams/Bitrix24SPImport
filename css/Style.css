@@ -1,0 +1,526 @@
+body {
+    font: 14px/1.5 system-ui, Segoe UI, Roboto, Arial, sans-serif;
+    margin: 20px;
+    color: #222
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 12px
+}
+
+.tab-btn {
+    appearance: none;
+    border: 0;
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer
+}
+
+.tab-btn[aria-selected="true"] {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: #fff
+}
+
+.panel {
+    display: none;
+    border: 1px solid #ddd;
+    border-top: 0;
+    padding: 12px;
+    border-radius: 0 8px 8px 8px
+}
+
+.panel[aria-hidden="false"] {
+    display: block
+}
+
+pre {
+    white-space: pre-wrap;
+    background: #fafafa;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 6px
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%
+}
+
+th, td {
+    border: 1px solid #eee;
+    padding: 6px;
+    text-align: left
+}
+
+th {
+    background: #fafafa
+}
+
+.muted {
+    color: #777
+}
+
+.right {
+    float: right
+}
+     /* минимальная сетка и аккуратные элементы */
+ body {
+     font: 14px/1.4 system-ui, Segoe UI, Roboto, Arial, sans-serif;
+
+ }
+
+.row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+label {
+    font-weight: 600;
+}
+
+input[type="number"], input[type="text"] {
+    padding: 6px 8px;
+    width: 200px;
+}
+
+button {
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+#step {
+    margin-top: 18px;
+}
+
+.dropzone {
+    border: 2px dashed #bbb;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    color: #666;
+}
+
+.dropzone.drag {
+    border-color: #333;
+    color: #111;
+    background: #fafafa;
+}
+
+.hint {
+    color: #777;
+    font-size: 12px;
+}
+
+/* заголовки */
+h1, h2, h3 {
+    margin: 12px 0;
+    font-weight: 600;
+    color: #333;
+}
+
+/* кнопки */
+button {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f8f8f8;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+button:hover {
+    background: #eee;
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+button.primary {
+    background: #2ea44f;
+    border-color: #2ea44f;
+    color: #fff;
+}
+button.primary:hover {
+    background: #279246;
+}
+
+/* блоки действий */
+.actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* таблицы внутри скролл-контейнера */
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+.table-wrap table {
+    margin: 0;
+    border: 0;
+}
+
+/* подзаголовки и пояснительный текст */
+.section-note {
+    color: #777;
+    font-size: 13px;
+    margin-top: -6px;
+    margin-bottom: 10px;
+}
+.panel {
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+
+/* таблицы более читабельные */
+table {
+    background: #fff;
+}
+tr:nth-child(even) {
+    background: #fafafa;
+}
+th {
+    font-weight: 600;
+    color: #444;
+}
+
+/* мелкие элементы */
+.muted {
+    font-size: 13px;
+}
+pre {
+    font-size: 13px;
+    line-height: 1.4;
+}
+/* =========================
+   БАЗА: типографика и сетка
+   ========================= */
+:root{
+    /* палитра и скругления на все страницы */
+    --bg:#ffffff;
+    --ink:#222;
+    --muted:#777;
+    --line:#e6e6e6;
+    --soft:#f7f7f7;
+    --primary:#2ea44f;
+    --warn:#f59e0b;
+    --danger:#ef4444;
+    --radius:10px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+    font:14px/1.5 system-ui, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    margin:20px;
+}
+
+/* контейнер — если вдруг уже есть div.container, он станет аккуратным */
+.container{max-width:1200px;margin:0 auto;padding:0 12px}
+
+/* заголовки единообразно */
+h1,h2,h3{margin:12px 0;font-weight:700;color:#333}
+h1{font-size:20px} h2{font-size:16px} h3{font-size:15px}
+.muted{color:var(--muted);font-size:13px}
+.right{float:right}
+
+/* =========================
+   ТАБЫ и ПАНЕЛИ (index, др.)
+   ========================= */
+.tabs{
+    display:flex;gap:8px;align-items:flex-end;
+    border-bottom:1px solid var(--line);margin-bottom:12px;
+}
+.tab-btn{
+    appearance:none;border:1px solid transparent;background:#f2f2f2;
+    padding:8px 12px;border-radius:8px 8px 0 0;cursor:pointer;
+}
+.tab-btn:hover{background:#eee}
+.tab-btn[aria-selected="true"]{
+    background:#fff;border-color:var(--line);border-bottom-color:#fff;
+}
+.panel{
+    display:none;border:1px solid var(--line);border-top:0;
+    padding:14px;border-radius:0 var(--radius) var(--radius) var(--radius);
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.03);
+}
+.panel[aria-hidden="false"]{display:block}
+
+/* =========================
+   ТАБЛИЦЫ (логи, файлы, поля)
+   ========================= */
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:var(--radius)}
+.table-wrap table{margin:0;border:0}
+
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600;color:#444}
+tbody tr:nth-child(even){background:#fbfbfb}
+td .muted{font-size:12px}
+
+/* компактные чекбоксы в списках файлов/логов */
+input[type="checkbox"]{width:16px;height:16px}
+
+/* =========================
+   КНОПКИ и БЛОКИ ДЕЙСТВИЙ
+   ========================= */
+button,
+input[type="button"],
+input[type="submit"]{
+    padding:8px 14px;border:1px solid var(--line);border-radius:8px;
+    background:#f8f8f8;cursor:pointer;transition:.15s;
+}
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover{background:#eee;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+.btn-primary,
+button.primary,
+input[type="submit"].primary{
+    background:var(--primary);border-color:var(--primary);color:#fff;
+}
+.btn-primary:hover,
+button.primary:hover,
+input[type="submit"].primary:hover{filter:brightness(.95)}
+
+.actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* =========================
+   ФОРМЫ (fieldsSP, linkedSP, pars)
+   ========================= */
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+label{font-weight:600}
+input[type="text"],input[type="number"],input[type="file"],select,textarea{
+    padding:7px 10px;border:1px solid var(--line);border-radius:8px;min-width:220px;
+    background:#fff;outline:none;transition:border-color .15s, box-shadow .15s;
+}
+textarea{min-height:80px}
+input:focus,select:focus,textarea:focus{border-color:#cbd5e1;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+#step{margin-top:18px}
+
+/* дропзона для загрузок (index/runImport) */
+.dropzone{
+    border:2px dashed #bbb;border-radius:var(--radius);padding:18px;text-align:center;color:#666;
+    background:#fff;transition:.15s;
+}
+.dropzone.drag{border-color:#333;color:#111;background:#fafafa}
+.hint{color:var(--muted);font-size:12px}
+
+/* =========================
+   БЕЙДЖИ/СТАТУСЫ для парсера/линковок
+   ========================= */
+.badge{
+    display:inline-block;padding:3px 8px;border-radius:999px;
+    font-size:12px;border:1px solid var(--line);background:#fff;
+}
+.badge--ok{background:#e7f7ee;border-color:#b7e3c8;color:#1f6f3b}
+.badge--warn{background:#fff7e6;border-color:#f3d08a;color:#7a5200}
+.badge--err{background:#ffecec;border-color:#ffc0c0;color:#8b1a1a}
+
+/* =========================
+   АЛЕРТЫ и ПОДСКАЗКИ (общие)
+   ========================= */
+.alert{
+    padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:10px 0;background:#fff;
+}
+.alert--ok{border-color:#b7e3c8;background:#e7f7ee;color:#1f6f3b}
+.alert--warn{border-color:#f3d08a;background:#fff7e6;color:#7a5200}
+.alert--err{border-color:#ffc0c0;background:#ffecec;color:#8b1a1a}
+
+/* =========================
+   ПРОЧЕЕ: код, преформат, прогресс
+   ========================= */
+pre,code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    background:#fafafa;border:1px solid #eee;border-radius:8px;
+}
+pre{white-space:pre-wrap;padding:10px;font-size:13px;line-height:1.45;margin:8px 0}
+code{padding:2px 6px}
+
+/* простой индикатор прогресса (для runImport) */
+.progress{height:10px;background:#f1f1f1;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.progress__bar{height:100%;width:0;background:var(--primary);transition:width .3s}
+
+/* =========================
+   АДАПТИВ
+   ========================= */
+@media (max-width:768px){
+    body{margin:14px}
+    .row{gap:8px}
+    input[type="text"],input[type="number"],select,textarea{min-width:160px;width:100%}
+    table{font-size:13px}
+}
+/* оформление поля выбора файла */
+input[type="file"] {
+    display: inline-block;
+    font-size: 14px;
+    color: #333;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s, background .15s;
+}
+
+/* при наведении */
+input[type="file"]:hover {
+    background: #fafafa;
+    border-color: #ccc;
+}
+
+/* при фокусе */
+input[type="file"]:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,.2);
+}
+
+/* убрать стандартный текстовый вид (на современных браузерах) */
+input[type="file"]::file-selector-button {
+    margin-right: 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 12px;
+    background: #f8f8f8;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #eee;
+}
+
+/* поддержка для старых webkit-браузеров */
+input[type="file"]::-webkit-file-upload-button {
+    margin-right: 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 12px;
+    background: #f8f8f8;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: #eee;
+}
+/* === Modern overrides (non-breaking) === */
+:root{
+    --bg:#fff; --ink:#222; --muted:#6b7280;
+    --line:#e5e7eb; --soft:#f8fafc;
+    --primary:#2ea44f; --primary-ink:#fff;
+    --radius:10px; --radius-sm:8px;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.06);
+    --shadow-md:0 6px 16px rgba(0,0,0,.08);
+}
+
+/* базовая типографика и отступы */
+body{ background:var(--bg); color:var(--ink); letter-spacing:.2px; }
+
+/* кнопки: лёгкие, отзывчивые */
+button,
+input[type="button"],
+input[type="submit"]{
+    padding:9px 14px; border:1px solid var(--line);
+    border-radius:var(--radius-sm); background:#f9fafb;
+    transition:background .2s, box-shadow .2s, transform .02s;
+    box-shadow: var(--shadow-sm);
+}
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover{
+    background:#eef2f7; box-shadow: var(--shadow-md);
+}
+button:active{ transform:translateY(1px); }
+button.primary,
+input[type="submit"].primary{
+    background:var(--primary); color:var(--primary-ink); border-color:var(--primary);
+}
+
+/* чёткий focus-ring для всех контролов */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus{
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(46,164,79,.18), var(--shadow-sm);
+    border-color: #cbd5e1;
+}
+
+/* табы и панели: чище и мягче */
+.tabs{ border-bottom:1px solid var(--line); gap:10px; }
+.tab-btn{
+    background:#f1f5f9; border:1px solid transparent;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.tab-btn[aria-selected="true"]{
+    background:#fff; border-color:var(--line); border-bottom-color:#fff;
+    box-shadow: 0 1px 0 #fff;
+}
+.panel{
+    background:#fff; border:1px solid var(--line); border-top:0;
+    border-radius:0 var(--radius) var(--radius) var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+/* таблицы: зебра, липкая шапка, подсветка строк */
+table{ background:#fff; border-collapse:collapse; }
+th, td{ border:1px solid var(--line); padding:10px; }
+tbody tr:nth-child(even){ background:#fafafa; }
+tbody tr:hover{ background:#f5f7fb; }
+thead th{ position:sticky; top:0; z-index:1; background:var(--soft); }
+
+/* формы: выравнивание и единый стиль полей */
+.row{ gap:14px; }
+input[type="text"], input[type="number"], input[type="file"], select, textarea{
+    padding:9px 12px; border:1px solid var(--line); border-radius:var(--radius-sm);
+    background:#fff; transition:border-color .2s, box-shadow .2s, background .2s;
+}
+input[type="file"]::file-selector-button{
+    margin-right:10px; border:1px solid var(--line); border-radius:6px;
+    padding:7px 12px; background:#f3f4f6; cursor:pointer; transition:background .2s;
+}
+input[type="file"]::file-selector-button:hover{ background:#e5e7eb; }
+
+/* дропзона: активное состояние заметнее */
+.dropzone{ background:#fff; box-shadow: var(--shadow-sm); }
+.dropzone.drag{ border-color:#111; background:#f8fafc; }
+
+/* «немой» текст и кодовые блоки */
+.muted{ color:var(--muted); font-size:13px; }
+pre{ font-size:13px; line-height:1.45; background:#f8fafc; border:1px solid var(--line); border-radius:var(--radius-sm); }
+
+/* прогресс-бар аккуратнее */
+.progress{ height:10px; border-radius:999px; background:#eef2f7; border:1px solid var(--line); }
+.progress__bar{ background:var(--primary); transition:width .25s ease; }
+
+/* тёмная тема (авто) */
+@media (prefers-color-scheme: dark){
+    :root{
+        --bg:#0b0f14; --ink:#e5eef7; --muted:#96a0ad;
+        --line:#1f2937; --soft:#0f1621; --primary:#34d399; --primary-ink:#0b0f14;
+    }
+    body{ background:var(--bg); color:var(--ink); }
+    .tab-btn{ background:#111827; }
+    .panel, table, pre{ background:#0f1621; border-color:#1f2937; }
+    th, td{ border-color:#1f2937; }
+    tbody tr:nth-child(even){ background:#0c121a; }
+    tbody tr:hover{ background:#101826; }
+    .dropzone{ background:#0f1621; }
+}
+
+/* меньше движения для тех, кому важно */
+@media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+}

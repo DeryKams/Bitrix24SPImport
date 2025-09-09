@@ -6,60 +6,10 @@ require_once(__DIR__ . '/crest.php'); ?>
 <head>
     <meta charset="utf-8">
     <title>Импорт в смарт-процесс</title>
+    <link rel="stylesheet" type="text/css" href="css/Style.css">
     <!-- HTMX -->
     <script src="lib/htmx.min.js"></script>
-    <style>
-        /* минимальная сетка и аккуратные элементы */
-        body {
-            font: 14px/1.4 system-ui, Segoe UI, Roboto, Arial, sans-serif;
-            margin: 20px;
-        }
 
-        .row {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-
-        label {
-            font-weight: 600;
-        }
-
-        input[type="number"], input[type="text"] {
-            padding: 6px 8px;
-            width: 200px;
-        }
-
-        button {
-            padding: 6px 10px;
-            cursor: pointer;
-        }
-
-        #step {
-            margin-top: 18px;
-        }
-
-        .dropzone {
-            border: 2px dashed #bbb;
-            border-radius: 8px;
-            padding: 18px;
-            text-align: center;
-            color: #666;
-        }
-
-        .dropzone.drag {
-            border-color: #333;
-            color: #111;
-            background: #fafafa;
-        }
-
-        .hint {
-            color: #777;
-            font-size: 12px;
-        }
-    </style>
 </head>
 <body>
 <?php

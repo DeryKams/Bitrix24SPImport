@@ -87,7 +87,7 @@ for ($r = 1; $r < count($rows); $r++) {
     }
 }
 
-// 6) Ответ для HTMX
+// Ответ для HTMX
 echo "<div><strong>Создано:</strong> {$created}; <strong>пропущено:</strong> {$skipped}</div>";
 if ($errors) {
     echo "<details><summary>Ошибки (".count($errors).")</summary><pre>";

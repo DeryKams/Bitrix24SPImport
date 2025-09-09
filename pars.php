@@ -6,18 +6,20 @@ require_once __DIR__ . '/lib/SimpleXLSX.php';
 
 use Shuchkin\SimpleXLSX;
 
-// 0) Проверяем entityTypeId (может прийти из формы или hx-vals)
+// Проверяем entityTypeId (может прийти из формы или hx-vals)
 $eTypeId = isset($_POST['entityTypeId']) ? (int)$_POST['entityTypeId'] : 0;
 
-// 1) Проверяем файл
+// Проверяем файл
 if (empty($_FILES['xlsx']['tmp_name'])) {
     exit('<div>Загрузите .xlsx</div>');
 }
 
-// 2) Сохраняем файл во временную папку и выдаём "токен"
+// Сохраняем файл во временную папку и выдаём "токен"
 $uploadDir = __DIR__ . '/uploads';
 if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
+    if (!mkdir($uploadDir, 0777, true) && !is_dir($uploadDir)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+    }
 }
 
 $fileToken = 'u_' . bin2hex(random_bytes(8)) . '.xlsx'; // простой токен-имя
@@ -27,7 +29,7 @@ if (!move_uploaded_file($_FILES['xlsx']['tmp_name'], $savePath)) {
     exit('<div>Не удалось сохранить файл</div>');
 }
 
-// 3) Парсим файл и достаём заголовки первой строки
+//  Парсим файл и достаём заголовки первой строки
 if (!$xlsx = Shuchkin\SimpleXLSX::parse($savePath)) {
     exit('<div>Не удалось прочитать XLSX</div>');
 }
@@ -38,10 +40,12 @@ if (!$rows || !isset($rows[0])) {
 }
 
 // Чистим заголовки: обрезать пробелы, убрать пустые
-$headers = array_values(array_filter(array_map('trim', $rows[0]), fn($v) => $v !== ''));
+$headers = array_values(array_filter(array_map('trim', $rows[0]), function ($v) {
+    return $v !== '';
+}));
 
 
-// 4) Показываем превью заголовков и форму, которая пойдёт в fieldsSP.php
+// Показываем превью заголовков и форму, которая пойдёт в fieldsSP.php
 ?>
 <?php
 $placementRaw = $_POST['PLACEMENT_OPTIONS'] ?? '';
@@ -77,7 +81,7 @@ $dealId = findDealId($placement);
         <!-- ЗАМЕНИ 'crm_entity' на реальный код UF (например, UF_CRM_XXXXX), если он отличается -->
         <input type="hidden" name="defaults[crm_entity]" value="<?= 'D_'.(int)$dealId ?>">
         <div style="margin:8px 0;color:#555">
-            По умолчанию: parentId2 = <?= (int)$dealId ?>, crm_entity = <?= 'D_'.(int)$dealId ?>
+            По-умолчанию будет установлена связь со сделкой с ID: "<strong><?= (int)$dealId ?></strong>"
         </div>
     <?php endif; ?>
 
