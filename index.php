@@ -269,12 +269,7 @@
     if ($logsRoot === null) { $logsRoot = __DIR__ . '/logs'; }
 
     // URL префикс ссылки доступны только если logs под DOCUMENT_ROOT
-    $logsUrlPrefix = null;
-    $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/');
-    if ($docRoot && strpos($logsRoot, $docRoot) === 0) {
-        $rel = ltrim(substr($logsRoot, strlen($docRoot)), '/');
-        $logsUrlPrefix = ($rel === '' ? '' : $rel . '/');
-    }
+    $logsUrlPrefix = 'logs/';
 
     // Удаление отмеченных файлов
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['__action'] ?? '') === 'delete_logs') {
