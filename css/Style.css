@@ -21,9 +21,9 @@ body {
 }
 
 .tab-btn[aria-selected="true"] {
-    background: #fff;
+    background: #f1f1f1;
     border: 1px solid #ddd;
-    border-bottom-color: #fff
+    border-bottom-color: #f1f1f1
 }
 
 .panel {
@@ -199,9 +199,7 @@ pre {
     font-size: 13px;
     line-height: 1.4;
 }
-/* =========================
-   БАЗА: типографика и сетка
-   ========================= */
+
 :root{
     /* палитра и скругления на все страницы */
     --bg:#ffffff;
@@ -233,9 +231,6 @@ h1{font-size:20px} h2{font-size:16px} h3{font-size:15px}
 .muted{color:var(--muted);font-size:13px}
 .right{float:right}
 
-/* =========================
-   ТАБЫ и ПАНЕЛИ (index, др.)
-   ========================= */
 .tabs{
     display:flex;gap:8px;align-items:flex-end;
     border-bottom:1px solid var(--line);margin-bottom:12px;
@@ -255,9 +250,6 @@ h1{font-size:20px} h2{font-size:16px} h3{font-size:15px}
 }
 .panel[aria-hidden="false"]{display:block}
 
-/* =========================
-   ТАБЛИЦЫ (логи, файлы, поля)
-   ========================= */
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:var(--radius)}
 .table-wrap table{margin:0;border:0}
 
@@ -270,9 +262,6 @@ td .muted{font-size:12px}
 /* компактные чекбоксы в списках файлов/логов */
 input[type="checkbox"]{width:16px;height:16px}
 
-/* =========================
-   КНОПКИ и БЛОКИ ДЕЙСТВИЙ
-   ========================= */
 button,
 input[type="button"],
 input[type="submit"]{
@@ -294,9 +283,7 @@ input[type="submit"].primary:hover{filter:brightness(.95)}
 
 .actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
 
-/* =========================
-   ФОРМЫ (fieldsSP, linkedSP, pars)
-   ========================= */
+
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 label{font-weight:600}
 input[type="text"],input[type="number"],input[type="file"],select,textarea{
@@ -315,9 +302,6 @@ input:focus,select:focus,textarea:focus{border-color:#cbd5e1;box-shadow:0 0 0 3p
 .dropzone.drag{border-color:#333;color:#111;background:#fafafa}
 .hint{color:var(--muted);font-size:12px}
 
-/* =========================
-   БЕЙДЖИ/СТАТУСЫ для парсера/линковок
-   ========================= */
 .badge{
     display:inline-block;padding:3px 8px;border-radius:999px;
     font-size:12px;border:1px solid var(--line);background:#fff;
@@ -326,9 +310,6 @@ input:focus,select:focus,textarea:focus{border-color:#cbd5e1;box-shadow:0 0 0 3p
 .badge--warn{background:#fff7e6;border-color:#f3d08a;color:#7a5200}
 .badge--err{background:#ffecec;border-color:#ffc0c0;color:#8b1a1a}
 
-/* =========================
-   АЛЕРТЫ и ПОДСКАЗКИ (общие)
-   ========================= */
 .alert{
     padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:10px 0;background:#fff;
 }
@@ -336,9 +317,7 @@ input:focus,select:focus,textarea:focus{border-color:#cbd5e1;box-shadow:0 0 0 3p
 .alert--warn{border-color:#f3d08a;background:#fff7e6;color:#7a5200}
 .alert--err{border-color:#ffc0c0;background:#ffecec;color:#8b1a1a}
 
-/* =========================
-   ПРОЧЕЕ: код, преформат, прогресс
-   ========================= */
+
 pre,code{
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     background:#fafafa;border:1px solid #eee;border-radius:8px;
@@ -350,9 +329,7 @@ code{padding:2px 6px}
 .progress{height:10px;background:#f1f1f1;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
 .progress__bar{height:100%;width:0;background:var(--primary);transition:width .3s}
 
-/* =========================
-   АДАПТИВ
-   ========================= */
+
 @media (max-width:768px){
     body{margin:14px}
     .row{gap:8px}
@@ -414,7 +391,6 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"]::-webkit-file-upload-button:hover {
     background: #eee;
 }
-/* === Modern overrides (non-breaking) === */
 :root{
     --bg:#fff; --ink:#222; --muted:#6b7280;
     --line:#e5e7eb; --soft:#f8fafc;
@@ -505,22 +481,180 @@ pre{ font-size:13px; line-height:1.45; background:#f8fafc; border:1px solid var(
 .progress{ height:10px; border-radius:999px; background:#eef2f7; border:1px solid var(--line); }
 .progress__bar{ background:var(--primary); transition:width .25s ease; }
 
-/* тёмная тема (авто) */
-@media (prefers-color-scheme: dark){
-    :root{
-        --bg:#0b0f14; --ink:#e5eef7; --muted:#96a0ad;
-        --line:#1f2937; --soft:#0f1621; --primary:#34d399; --primary-ink:#0b0f14;
-    }
-    body{ background:var(--bg); color:var(--ink); }
-    .tab-btn{ background:#111827; }
-    .panel, table, pre{ background:#0f1621; border-color:#1f2937; }
-    th, td{ border-color:#1f2937; }
-    tbody tr:nth-child(even){ background:#0c121a; }
-    tbody tr:hover{ background:#101826; }
-    .dropzone{ background:#0f1621; }
+:root{
+    --ease-out: cubic-bezier(.2,.8,.2,1);
+    --ease-soft: cubic-bezier(.33,1,.68,1);
+    --dur-fast: .18s;
+    --dur-md: .28s;
+    --dur-slow: .6s;
 }
 
-/* меньше движения для тех, кому важно */
+/* Базовые keyframes */
+@keyframes fadeIn      { from{opacity:0} to{opacity:1} }
+@keyframes fadeSlideUp { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+@keyframes pop         { 0%{transform:scale(.98)} 100%{transform:scale(1)} }
+@keyframes pulseBorder { 0%,100%{box-shadow:0 0 0 0 rgba(46,164,79,.25)} 50%{box-shadow:0 0 0 6px rgba(46,164,79,.12)} }
+@keyframes stripes     { from{background-position:0 0} to{background-position:40px 0} }
+@keyframes shimmer     { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+@keyframes rotate360   { to{ transform: rotate(360deg) } }
+
+/* Мягкие hover/active состояния + «пружинка» кнопки */
+button,
+input[type="button"],
+input[type="submit"]{
+    transition:
+            background var(--dur-md) var(--ease-soft),
+            box-shadow var(--dur-md) var(--ease-soft),
+            transform var(--dur-fast) linear,
+            border-color var(--dur-fast) linear;
+    will-change: transform;
+}
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover{
+    transform: translateY(-1px);
+}
+button:active{ transform: translateY(0) scale(.99); }
+
+/* Имитация «ripple» для кнопок без JS (скромная) */
+button::after,
+input[type="button"]::after,
+input[type="submit"]::after{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:inherit;
+    opacity:0; transform: scale(.9);
+}
+button:active::after,
+input[type="button"]:active::after,
+input[type="submit"]:active::after{
+    animation: pop var(--dur-fast) var(--ease-out);
+}
+
+/* Вкладки и панели: плавное появление */
+.tab-btn{
+    transition: background var(--dur-fast), box-shadow var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast);
+}
+.tab-btn[aria-selected="true"]{
+    animation: pop var(--dur-fast) var(--ease-soft);
+}
+.panel{
+    transition: opacity var(--dur-md) var(--ease-soft);
+}
+.panel[aria-hidden="false"]{
+    animation: fadeSlideUp var(--dur-md) var(--ease-soft);
+}
+
+/* Таблицы: подсветка строк, плавные ховеры, «зебра» уже есть */
+tbody tr{
+    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) linear;
+}
+tbody tr:hover{
+    background:#f5f7fb;
+    transform: translateZ(0);
+}
+/* ключевые кадры */
+@keyframes fadeSlideUp {
+    from { opacity:0; transform: translateY(6px); }
+    to   { opacity:1; transform:none; }
+}
+
+/* плавная подгрузка всех строк, с задержкой от позиции */
+tbody tr {
+    opacity: 0;
+    animation: fadeSlideUp .35s ease-out forwards;
+    /* умножаем индекс строки на шаг задержки */
+    animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+tbody tr:nth-child(1)  { --i: 1 }
+tbody tr:nth-child(2)  { --i: 2 }
+tbody tr:nth-child(3)  { --i: 3 }
+tbody tr:nth-child(4)  { --i: 4 }
+tbody tr:nth-child(5)  { --i: 5 }
+tbody tr:nth-child(6)  { --i: 6 }
+tbody tr:nth-child(7)  { --i: 7 }
+tbody tr:nth-child(8)  { --i: 8 }
+tbody tr:nth-child(9)  { --i: 9 }
+tbody tr:nth-child(10) { --i: 10 }
+tbody tr:nth-child(11) { --i: 11 }
+tbody tr:nth-child(12) { --i: 12 }
+tbody tr:nth-child(13) { --i: 13 }
+tbody tr:nth-child(14) { --i: 14 }
+tbody tr:nth-child(15) { --i: 15 }
+tbody tr:nth-child(16) { --i: 16 }
+tbody tr:nth-child(17) { --i: 17 }
+tbody tr:nth-child(18) { --i: 18 }
+tbody tr:nth-child(19) { --i: 19 }
+tbody tr:nth-child(20) { --i: 20 }
+tbody tr:nth-child(21) { --i: 21 }
+tbody tr:nth-child(22) { --i: 22 }
+tbody tr:nth-child(23) { --i: 23 }
+tbody tr:nth-child(24) { --i: 24 }
+tbody tr:nth-child(25) { --i: 25 }
+tbody tr:nth-child(26) { --i: 26 }
+tbody tr:nth-child(27) { --i: 27 }
+tbody tr:nth-child(28) { --i: 28 }
+tbody tr:nth-child(29) { --i: 29 }
+tbody tr:nth-child(30) { --i: 30 }
+tbody tr:nth-child(31) { --i: 31 }
+tbody tr:nth-child(32) { --i: 32 }
+tbody tr:nth-child(33) { --i: 33 }
+tbody tr:nth-child(34) { --i: 34 }
+tbody tr:nth-child(35) { --i: 35 }
+tbody tr:nth-child(36) { --i: 36 }
+tbody tr:nth-child(37) { --i: 37 }
+tbody tr:nth-child(38) { --i: 38 }
+tbody tr:nth-child(39) { --i: 39 }
+tbody tr:nth-child(40) { --i: 40 }
+tbody tr:nth-child(41) { --i: 41 }
+tbody tr:nth-child(42) { --i: 42 }
+tbody tr:nth-child(43) { --i: 43 }
+tbody tr:nth-child(44) { --i: 44 }
+tbody tr:nth-child(45) { --i: 45 }
+tbody tr:nth-child(46) { --i: 46 }
+tbody tr:nth-child(47) { --i: 47 }
+tbody tr:nth-child(48) { --i: 48 }
+tbody tr:nth-child(49) { --i: 49 }
+tbody tr:nth-child(50) { --i: 50 }
+
+
+.dropzone.drag{
+    animation: pulseBorder 1.1s infinite var(--ease-soft);
+}
+
+/* Инпуты/селекты/textarea: мягкий фокус */
+input[type="text"], input[type="number"], input[type="file"], select, textarea{
+    transition: border-color var(--dur-fast) linear, box-shadow var(--dur-md) var(--ease-soft), background var(--dur-fast) linear;
+}
+input:focus, select:focus, textarea:focus{
+    animation: fadeIn var(--dur-fast) both;
+}
+
+/* Прогресс-бар: «полосатая» заливка при движении */
+.progress{
+    overflow: hidden;
+}
+.progress__bar{
+    background-image: linear-gradient(45deg, rgba(255,255,255,.25) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.25) 50%, rgba(255,255,255,.25) 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+    animation: stripes .8s linear infinite;
+}
+
+/* Алерты: появление */
+.alert{ animation: fadeSlideUp var(--dur-md) var(--ease-soft) }
+
+.skeleton *{ opacity:0 }
+
+/*  Спиннер (универсальный) */
+.spinner{
+    width:18px;height:18px; border:2px solid rgba(0,0,0,.15);
+    border-top-color: var(--primary); border-radius:50%;
+    animation: rotate360 .7s linear infinite;
+    display:inline-block; vertical-align:middle;
+}
+
+/* Меньше движения по запросу пользователя */
 @media (prefers-reduced-motion: reduce){
-    *{ transition:none !important; animation:none !important; }
+    *{ animation: none !important; transition: none !important }
 }

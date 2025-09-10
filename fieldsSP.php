@@ -11,7 +11,6 @@ $dealId = 0;
 foreach (['DEAL_ID', 'dealId', 'ENTITY_ID', 'ID'] as $k) {
     if (isset($placement[$k]) && (int)$placement[$k] > 0) {
         $dealId = (int)$placement[$k];
-        print_r($dealId);
         break;
     }
 }
@@ -60,7 +59,7 @@ $fields = $resp['result']['fields'];
         <input type="hidden" name="defaults[crm_entity]" value="<?= 'D_'.$dealId ?>">
 
         <div style="margin:8px 0;color:#555">
-            По умолчанию будет установлена связь со сделкой #<?= (int)$dealId; ?>:
+            По-умолчанию будет установлена связь со сделкой с ID: "<strong><?= (int)$dealId ?></strong>"
             <code>crm_entity</code> = <?= (int)$dealId; ?>.
         </div>
     <?php endif; ?>

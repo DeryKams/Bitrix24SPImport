@@ -98,7 +98,7 @@ if ($placement_options_raw === '' && !empty($_REQUEST['PLACEMENT_OPTIONS'])) {
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const form  = document.getElementById('upload-form');
+        const form = document.getElementById('upload-form');
         let fileInp = document.getElementById('xlsx');
 
         // если у тебя автосабмит при выборе файла — вернём этот хэндлер после клонирования
@@ -107,13 +107,17 @@ if ($placement_options_raw === '' && !empty($_REQUEST['PLACEMENT_OPTIONS'])) {
                 if (inp.files && inp.files.length) form.requestSubmit();
             });
         }
+
         attachAutoSubmit(fileInp);
 
         document.getElementById('reset-file-btn').addEventListener('click', function (e) {
             e.preventDefault();
 
             // 1) Попытка простого очищения
-            try { fileInp.value = ''; } catch (_) {}
+            try {
+                fileInp.value = '';
+            } catch (_) {
+            }
 
             // 2) Гарантированный вариант: заменить на клон (чтобы потом снова выбрать тот же файл)
             const clone = fileInp.cloneNode(true);   // копирует атрибуты (id, name, accept, required)
@@ -124,8 +128,8 @@ if ($placement_options_raw === '' && !empty($_REQUEST['PLACEMENT_OPTIONS'])) {
             // 3) Почистим состояние и результаты
             const state = document.getElementById('state');
             if (state) state.innerHTML = '';          // скрытые headers[] + file_token
-            const step  = document.getElementById('step');
-            if (step)  step.innerHTML  = '';          // превью/маппинг/результаты
+            const step = document.getElementById('step');
+            if (step) step.innerHTML = '';          // превью/маппинг/результаты
 
             // 4) (если есть) уберём подсветку дропа
             const dz = document.getElementById('dz');

@@ -13,9 +13,6 @@ if ($placement_json !== '') {
         $placement_options = [];
     }
 }
-
-//print_r($placement_options);
-
 //Получаем все поля сделки, чтобы дальше отфильтровать Parent_ID, связанных смарт-процессов
 $deal = CRest::call(
         'crm.deal.get',
@@ -23,8 +20,6 @@ $deal = CRest::call(
                 'ID' => $placement_options['ID']
         ]
 );
-
-//print_r($deal);
 //Выводим данные по сделке
 
 //Получаем именно численные ID из PARENT ID, связанных смарт-процессов
@@ -84,11 +79,13 @@ if ($entityTypes) {
 ?>
 
 <!-- Отрисовываем селект name="entityTypeId" — ключ! он уйдет в pars.php -->
-<select id="entityTypeId" name="entityTypeId" required>
-    <option value="" disabled selected>— выберите смарт-процесс —</option>
-    <?php foreach ($options as $eid => $title): ?>
-        <option value="<?= htmlspecialchars($eid) ?>">
-            <?= htmlspecialchars($title) ?> (<?= htmlspecialchars($eid) ?>)
-        </option>
-    <?php endforeach; ?>
-</select>
+<label for="entityTypeId">
+    <select id="entityTypeId" name="entityTypeId" required>
+        <option value="" disabled selected>— выберите смарт-процесс —</option>
+        <?php foreach ($options as $eid => $title): ?>
+            <option value="<?= htmlspecialchars($eid) ?>">
+                <?= htmlspecialchars($title) ?> (<?= htmlspecialchars($eid) ?>)
+            </option>
+        <?php endforeach; ?>
+    </select>
+</label>

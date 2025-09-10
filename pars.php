@@ -55,64 +55,67 @@ if ($try && ($tmp = base64_decode($try, true)) !== false) $try = $tmp;
 $placement = $try ? json_decode($try, true) : [];
 if (!is_array($placement)) $placement = [];
 
-function findDealId($arr) {
-    $stack = [$arr]; $keys = ['DEAL_ID','dealId','ENTITY_ID','entityId','ID','id'];
+function findDealId($arr)
+{
+    $stack = [$arr];
+    $keys = ['DEAL_ID', 'dealId', 'ENTITY_ID', 'entityId', 'ID', 'id'];
     while ($stack) {
         $cur = array_pop($stack);
         if (!is_array($cur)) continue;
-        foreach ($cur as $k=>$v) {
-            if (in_array($k,$keys,true) && is_scalar($v) && (int)$v>0) return (int)$v;
-            if (is_array($v)) $stack[]=$v;
+        foreach ($cur as $k => $v) {
+            if (in_array($k, $keys, true) && is_scalar($v) && (int)$v > 0) return (int)$v;
+            if (is_array($v)) $stack[] = $v;
         }
     }
     return 0;
 }
+
 $dealId = findDealId($placement);
 ?>
 
 <form hx-post="runImport.php" hx-target="#step" hx-swap="innerHTML">
     <input type="hidden" name="entityTypeId" value="<?= (int)$eTypeId ?>">
-    <input type="hidden" name="file_token"    value="<?= htmlspecialchars($fileToken) ?>">
+    <input type="hidden" name="file_token" value="<?= htmlspecialchars($fileToken) ?>">
     <input type="hidden" name="PLACEMENT_OPTIONS"
            value="<?= htmlspecialchars($_POST['PLACEMENT_OPTIONS'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 
     <?php if ($dealId > 0): ?>
-        <input type="hidden" name="defaults[parentId2]"  value="<?= (int)$dealId ?>">
+        <input type="hidden" name="defaults[parentId2]" value="<?= (int)$dealId ?>">
         <!-- ЗАМЕНИ 'crm_entity' на реальный код UF (например, UF_CRM_XXXXX), если он отличается -->
-        <input type="hidden" name="defaults[crm_entity]" value="<?= 'D_'.(int)$dealId ?>">
+        <input type="hidden" name="defaults[crm_entity]" value="<?= 'D_' . (int)$dealId ?>">
         <div style="margin:8px 0;color:#555">
             По-умолчанию будет установлена связь со сделкой с ID: "<strong><?= (int)$dealId ?></strong>"
         </div>
     <?php endif; ?>
 
 
-<div>
-    <h3>Колонки файла:</h3>
-    <?php foreach ($headers as $h): ?>
-        <span style="display:inline-block;margin:2px 4px;padding:2px 6px;border:1px solid #ddd;">
+    <div>
+        <h3>Колонки файла:</h3>
+        <?php foreach ($headers as $h): ?>
+            <span style="display:inline-block;margin:2px 4px;padding:2px 6px;border:1px solid #ddd;">
       <?= htmlspecialchars($h) ?>
     </span>
-    <?php endforeach; ?>
-</div>
+        <?php endforeach; ?>
+    </div>
 
-<form id="build-mapping"
-      hx-post="fieldsSP.php"
-      hx-target="#step"
-      hx-swap="innerHTML"
-      hx-include="#entityTypeId, #placement_opts"><!-- тянем выбранный СП и PLACEMENT_OPTIONS из DOM -->
+    <form id="build-mapping"
+          hx-post="fieldsSP.php"
+          hx-target="#step"
+          hx-swap="innerHTML"
+          hx-include="#entityTypeId, #placement_opts"><!-- тянем выбранный СП и PLACEMENT_OPTIONS из DOM -->
 
-    <!-- путь к сохранённому файлу -->
-    <input type="hidden" name="file_token" value="<?= htmlspecialchars($fileToken) ?>">
+        <!-- путь к сохранённому файлу -->
+        <input type="hidden" name="file_token" value="<?= htmlspecialchars($fileToken) ?>">
 
-    <!-- заголовки колонок -->
-    <?php foreach ($headers as $h): ?>
-        <input type="hidden" name="headers[]" value="<?= htmlspecialchars($h) ?>">
-    <?php endforeach; ?>
+        <!-- заголовки колонок -->
+        <?php foreach ($headers as $h): ?>
+            <input type="hidden" name="headers[]" value="<?= htmlspecialchars($h) ?>">
+        <?php endforeach; ?>
 
-    <!-- дубль на случай отсутствия #placement_opts (перестраховка) -->
-    <input type="hidden" name="PLACEMENT_OPTIONS"
-           value="<?= htmlspecialchars($placementRaw, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
+        <!-- дубль на случай отсутствия #placement_opts (перестраховка) -->
+        <input type="hidden" name="PLACEMENT_OPTIONS"
+               value="<?= htmlspecialchars($placementRaw, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 
-    <br>
-    <button type="submit">Построить соответствия полей</button>
-</form>
+        <br>
+        <button type="submit">Построить соответствия полей</button>
+    </form>
