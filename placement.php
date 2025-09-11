@@ -61,6 +61,9 @@ if ($placement_options_raw === '' && !empty($_REQUEST['PLACEMENT_OPTIONS'])) {
     </div>
 </form>
 
+
+
+
 <!-- Сюда HTMX будет подставлять шаги (prevue → маппинг → импорт) -->
 <div id="step"></div>
 
