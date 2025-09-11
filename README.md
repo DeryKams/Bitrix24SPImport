@@ -2,33 +2,48 @@ RU: Приложение позволяет быстро загружать .xls
 
 EN: The application allows you to quickly upload .xlsx, set up field mappings and create linked smart process elements directly from the deal card. The upload history and query log help control the quality of import and search for errors. Suitable for bulk import and data update.
 
+---
+# Содержание
+### Интерфейсы левого меню приложений (Left Application Menu Interfaces)
+- [Главный экран (Home screen)](#главный-экран-home-screen)
+- [Загружаемые пользователями файлы (Files uploaded by users)](#загружаемые-пользователями-файлы-files-uploaded-by-users)
+- [Список логов (List of logs)](#список-логов-list-of-logs)
+### Интерфейсы приложения внутри карточки сделки (Application interfaces inside the deal card)
+- [Приложение в виджетах сделки (Application in deal widgets)](#приложение-в-виджетах-сделки-application-in-deal-widgets)
+- [Пример импорта файла (Example of file import)](#пример-импорта-файла-example-of-file-import)
+- [Запуск импорта из файла в смарт-процесс (Starting import from file to smart process)](#запуск-импорта-из-файла-в-смарт-процесс-starting-import-from-file-to-smart-process)
+- [Загруженные смарт-процессы (Loaded Smart Processes)](#загруженные-смарт-процессы-loaded-smart-processes)
+
+## Установка приложения (Installing the application)
+- [Настройка на сервере (Setting up on the server)](#2-настройка-на-сервере-setting-up-on-the-server)
+---
 # Обзор интерфейсов (Interface overview)
 
-## Интерфейсы левого меню приложений
+## Интерфейсы левого меню приложений (Left Application Menu Interfaces)
 
-### Главный экран
+### Главный экран (Home screen)
 На главном экране отображаются текущий пользователь и последний запрос к серверу.
 
 ![Главный экран](/gitDocs/img/Главная.jpg)
 
-### Загружаемые пользователями файлы
+### Загружаемые пользователями файлы (Files uploaded by users)
 Здесь показываются файлы, которые пользователи загрузили в приложение. Полезно, если нужно найти старый файл импорта или если они занимают большой объём на диске сервера.
 
 ![Файлы пользователей](/gitDocs/img/Файлы%20пользователей.jpg)
 
-### Список логов
+### Список логов (List of logs)
 Раздел с различными логами запросов. В случае ошибки сюда можно обратиться за подробной информацией.
 
 ![Логи](/gitDocs/img/Логи.jpg)
 ---
-## Интерфейсы приложения внутри карточки сделки
+## Интерфейсы приложения внутри карточки сделки (Application interfaces inside the deal card)
 
-### Размещение приложения в сделке
+### Приложение в виджетах сделки (Application in deal widgets)
 При установке можно выбрать понятное название приложения. Оно находится в карточке сделки под заданным вами названием.
 
 ![Приложение в сделке](/gitDocs/img/Приложение%20в%20сделке.jpg)
 
-### Пример импорта файла
+### Пример импорта файла (Example of file import)
 Перед началом выберите смарт-процесс, в который хотите выполнить импорт, затем загрузите файл.
 
 Приложение рассчитано на формат **.xlsx**, поэтому рекомендуется загружать именно такие файлы.
@@ -37,18 +52,18 @@ EN: The application allows you to quickly upload .xlsx, set up field mappings an
 
 ![Соответствие полей](/gitDocs/img/Соотвествие%20полей.jpg)
 
-### Запуск импорта из файла в смарт-процесс
+### Запуск импорта из файла в смарт-процесс (Starting import from file to smart process)
 После задания всех необходимых параметров и запуска импорта будет показано, сколько элементов успешно создано.
 
 ![Запуск импорта](/gitDocs/img/Запуск%20импорта.jpg)
 
-### Загруженные смарт-процессы
+### Загруженные смарт-процессы (Loaded Smart Processes)
 Список элементов, созданных в ходе импорта.
 
 ![Загруженные смарт-процессы](/gitDocs/img/Загруженные%20смарт-процессы.jpg)
 
 
-# Установка приложения
+# Установка приложения (Installing the application)
 
 1. Перейдите в левое меню вашего Битрикс24.
     - Откройте вкладку **«Приложения»** → пункт **«Разработчикам»**.
@@ -78,7 +93,7 @@ EN: The application allows you to quickly upload .xlsx, set up field mappings an
 
 ---
 
-## 2. Настройка на сервере
+## 2. Настройка на сервере (Setting up on the server)
 
 1. Зайдите в файлы приложения на сервере.
 2. Откройте файл **`settings.php`**.
