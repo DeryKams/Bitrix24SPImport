@@ -223,7 +223,10 @@ body{
 }
 
 /* контейнер — если вдруг уже есть div.container, он станет аккуратным */
-.container{max-width:1200px;margin:0 auto;padding:0 12px}
+.container {
+    margin:0;
+    padding:0 12px
+}
 
 /* заголовки единообразно */
 h1,h2,h3{margin:12px 0;font-weight:700;color:#333}
@@ -473,19 +476,12 @@ input[type="file"]::file-selector-button:hover{ background:#e5e7eb; }
 .dropzone{ background:#fff; box-shadow: var(--shadow-sm); }
 .dropzone.drag{ border-color:#111; background:#f8fafc; }
 
-/* «немой» текст и кодовые блоки */
-.muted{ color:var(--muted); font-size:13px; }
-pre{ font-size:13px; line-height:1.45; background:#f8fafc; border:1px solid var(--line); border-radius:var(--radius-sm); }
-
-/* прогресс-бар аккуратнее */
-.progress{ height:10px; border-radius:999px; background:#eef2f7; border:1px solid var(--line); }
-.progress__bar{ background:var(--primary); transition:width .25s ease; }
 
 :root{
     --ease-out: cubic-bezier(.2,.8,.2,1);
     --ease-soft: cubic-bezier(.33,1,.68,1);
-    --dur-fast: .18s;
-    --dur-md: .28s;
+    --dur-fast: .3s;
+    --dur-md: .2s;
     --dur-slow: .6s;
 }
 
@@ -550,7 +546,7 @@ tbody tr{
     transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) linear;
 }
 tbody tr:hover{
-    background:#f5f7fb;
+    background: #e1e1e8;
     transform: translateZ(0);
 }
 /* ключевые кадры */
@@ -631,30 +627,8 @@ input:focus, select:focus, textarea:focus{
     animation: fadeIn var(--dur-fast) both;
 }
 
-/* Прогресс-бар: «полосатая» заливка при движении */
-.progress{
-    overflow: hidden;
-}
-.progress__bar{
-    background-image: linear-gradient(45deg, rgba(255,255,255,.25) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.25) 50%, rgba(255,255,255,.25) 75%, transparent 75%, transparent);
-    background-size: 40px 40px;
-    animation: stripes .8s linear infinite;
-}
 
 /* Алерты: появление */
 .alert{ animation: fadeSlideUp var(--dur-md) var(--ease-soft) }
 
-.skeleton *{ opacity:0 }
 
-/*  Спиннер (универсальный) */
-.spinner{
-    width:18px;height:18px; border:2px solid rgba(0,0,0,.15);
-    border-top-color: var(--primary); border-radius:50%;
-    animation: rotate360 .7s linear infinite;
-    display:inline-block; vertical-align:middle;
-}
-
-/* Меньше движения по запросу пользователя */
-@media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; transition: none !important }
-}

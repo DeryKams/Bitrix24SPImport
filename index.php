@@ -28,7 +28,7 @@
             <?php
             require_once(__DIR__ . '/crestcurrent.php');
 
-            // два вызова, как у тебя; берём результат из CRestCurrent, если есть
+            // берём результат из CRestCurrent, если есть
             $r1 = CRest::call('user.current');
             $r2 = CRestCurrent::call('user.current');
 
@@ -37,7 +37,7 @@
             ?>
         </div>
         <h2>Данные из REQUEST последнего запроса</h2>
-        <pre><?php print_r($_REQUEST); ?></pre>
+        <pre> <?php print_r($_REQUEST); ?></pre>
     </section>
 
     <?php

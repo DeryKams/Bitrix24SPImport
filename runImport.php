@@ -15,6 +15,49 @@ if ($eTypeId <= 0) exit('<div>ENTITY_TYPE_ID не указан</div>');
 if (empty($map)) exit('<div>Карта соответствий пуста</div>');
 if ($fileToken === '') exit('<div>Нет токена файла</div>');
 
+// --------- ДОБАВЬ: сохранение маппинга на пользователя ---------
+
+/**
+ * Получаем текущего пользователя (ID), используя оба клиента:
+ * CRestCurrent (если доступен контекст приложения) и CRest (как запасной вариант).
+ * Возвращаем 0, если не получилось.
+ */
+function b24_get_current_user_id(): int {
+    $r2 = CRestCurrent::call('user.current');       // при открытии внутри Б24
+    $r1 = CRest::call('user.current');              // при вызове по вебхуку/иначе
+    $u  = $r2['result'] ?? $r1['result'] ?? null;
+    return isset($u['ID']) ? (int)$u['ID'] : 0;
+}
+
+$userId = b24_get_current_user_id();               // ID пользователя, открывшего приложение
+if ($userId > 0) {
+    $baseDir   = __DIR__ . '/users';               // корневая папка пользователей
+    $userDir   = $baseDir . '/' . $userId;         // ./users/123
+    // создаём директорию, если её нет (рекурсивно)
+    if (!is_dir($userDir)) {
+        if (!mkdir($userDir, 0775, true) && !is_dir($userDir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $userDir));
+        }              // права 775; @ чтобы не шуметь варнингами
+    }
+
+    // Пакет данных, который сохраняем (полезно иметь метаданные)
+    $payload = [
+        'entityTypeId' => $eTypeId,                // смарт-процесс
+        'map'          => $map,                    // карта соответствий поле->колонка
+        'savedAt'      => date('c'),               // ISO8601 время сохранения
+        'userId'       => $userId,                 // кто сохранял
+    ];
+
+    // имя файла привязываем к смарт-процессу
+    $filePath = $userDir . '/mapping_sp_' . $eTypeId . '.json';
+
+    // пишем атомарно
+    file_put_contents(
+        $filePath,
+        json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
+        LOCK_EX
+    );
+}
 
 // Путь к ранее сохранённому файлу
 $path = __DIR__ . '/uploads/' . basename($fileToken);

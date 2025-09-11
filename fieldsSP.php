@@ -31,7 +31,7 @@ if ($fileToken === '') exit('<div>Нет токена файла</div>');
 // Тянем поля смарт-процесса
 $resp = CRest::call('crm.item.fields', [
         'entityTypeId' => $eTypeId,
-        'useOriginalUfNames' => 'Y',
+        'useOriginalUfNames' => 'N',
 ]);
 if (!$resp || empty($resp['result']['fields'])) {
     exit('<div>Не удалось получить поля для entityTypeId ' . $eTypeId . '</div>');
@@ -41,6 +41,20 @@ $fields = $resp['result']['fields'];
 
 // рисуем таблицу соответствий: поле CRM  select(headers)
 ?>
+
+<h3>Текущий пользователь Bitrix24</h3>
+<div id="name">
+    <?php
+    require_once(__DIR__ . '/crestcurrent.php');
+
+    // берём результат из CRestCurrent, если есть
+    $r1 = CRest::call('user.current');
+    $r2 = CRestCurrent::call('user.current');
+    $u = $r2['result'] ?? $r1['result'] ?? null;
+    echo $u ? htmlspecialchars(($u['NAME'] ?? '') . ' ' . ($u['LAST_NAME'] ?? '')) : '<span class="muted">Пользователь не получен</span>';
+    ?>
+</div>
+
 <form id="mapping-form"
       hx-post="runImport.php"
       hx-target="#step"
@@ -52,7 +66,7 @@ $fields = $resp['result']['fields'];
     <input type="hidden" name="PLACEMENT_OPTIONS"
            value="<?= htmlspecialchars($_POST['PLACEMENT_OPTIONS'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
     <?php if ($dealId > 0): ?>
-        <!-- parentId2  связь со сделкой  -->
+        <!-- parentId2 связь со сделкой  -->
         <input type="hidden" name="defaults[parentId2]" value="<?= $dealId ?>">
 
         <!-- crm_entity UF_CRM_*  строка формата  -->
